@@ -1,13 +1,19 @@
 package com.yuk.mediaeditor.module
 
 import com.github.kyuubiran.ezxhelper.utils.Log
-import com.yuk.mediaeditor.utils.ktx.hookBeforeMethod
+import com.yuk.mediaeditor.utils.HookRegister
+import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-class SkyCheckHelper {
+object SkyCheckHelper : HookRegister() {
 
-    fun init() {
+    override fun init() {
         try {
-            "com.miui.gallery.editor_common.libs.SkyCheckHelper".hookBeforeMethod("isSupportTextYanhua") {
+            val cls =
+                if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.editor_common.libs.SkyCheckHelper"
+                else "com.miui.gallery.editor.photo.app.sky.sdk.SkyCheckHelper"
+            cls.hookBeforeMethod(
+                getDefaultClassLoader(), "isSupportTextYanhua"
+            ) {
                 it.result = true
             }
         } catch (e: Throwable) {

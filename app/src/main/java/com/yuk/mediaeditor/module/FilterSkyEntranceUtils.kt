@@ -1,13 +1,19 @@
 package com.yuk.mediaeditor.module
 
 import com.github.kyuubiran.ezxhelper.utils.Log
-import com.yuk.mediaeditor.utils.ktx.hookBeforeMethod
+import com.yuk.mediaeditor.utils.HookRegister
+import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-class FilterSkyEntranceUtils {
+object FilterSkyEntranceUtils : HookRegister() {
 
-    fun init() {
+    override fun init() {
         try {
-            "com.miui.gallery.editor_common.library.photoeditor.FilterSkyEntranceUtils".hookBeforeMethod("showSingleFilterSky") {
+            val cls =
+                if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.editor_common.library.photoeditor.FilterSkyEntranceUtils"
+                else "com.miui.gallery.util.FilterSkyEntranceUtils"
+            cls.hookBeforeMethod(
+                getDefaultClassLoader(), "showSingleFilterSky"
+            ) {
                 it.result = true
             }
         } catch (e: Throwable) {

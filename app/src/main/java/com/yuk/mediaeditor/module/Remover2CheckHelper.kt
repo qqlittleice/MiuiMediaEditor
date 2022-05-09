@@ -1,13 +1,19 @@
 package com.yuk.mediaeditor.module
 
 import com.github.kyuubiran.ezxhelper.utils.Log
-import com.yuk.mediaeditor.utils.ktx.hookBeforeMethod
+import com.yuk.mediaeditor.utils.HookRegister
+import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-class Remover2CheckHelper {
+object Remover2CheckHelper : HookRegister() {
 
-    fun init() {
+    override fun init() {
         try {
-            "com.miui.gallery.editor_common.library.remover.Remover2CheckHelper".hookBeforeMethod("isRemover2Support") {
+            val cls =
+                if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.editor_common.library.remover.Remover2CheckHelper"
+                else "com.miui.gallery.editor.photo.app.remover2.sdk.Remover2CheckHelper"
+            cls.hookBeforeMethod(
+                getDefaultClassLoader(), "isRemover2Support"
+            ) {
                 it.result = true
             }
         } catch (e: Throwable) {

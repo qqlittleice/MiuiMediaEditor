@@ -1,13 +1,19 @@
 package com.yuk.mediaeditor.module
 
 import com.github.kyuubiran.ezxhelper.utils.Log
-import com.yuk.mediaeditor.utils.ktx.hookBeforeMethod
+import com.yuk.mediaeditor.utils.HookRegister
+import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-class SmartVideoJudgeManager {
+object SmartVideoJudgeManager : HookRegister() {
 
-    fun init() {
+    override fun init() {
         try {
-            "com.miui.gallery.video.editor.manager.SmartVideoJudgeManager".hookBeforeMethod("isAvailable") {
+            val cls =
+                if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.video.editor.manager.SmartVideoJudgeManager"
+                else "com.miui.gallery.video.editor.manager.SmartVideoJudgeManager"
+            cls.hookBeforeMethod(
+                getDefaultClassLoader(), "isAvailable"
+            ) {
                 it.result = true
             }
         } catch (e: Throwable) {

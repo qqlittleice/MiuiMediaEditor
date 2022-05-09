@@ -1,13 +1,20 @@
 package com.yuk.mediaeditor.module
 
 import com.github.kyuubiran.ezxhelper.utils.Log
-import com.yuk.mediaeditor.utils.ktx.hookBeforeMethod
+import com.yuk.mediaeditor.utils.HookRegister
+import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-class ArtStillEntranceUtils {
+object ArtStillEntranceUtils : HookRegister() {
 
-    fun init() {
+    override fun init() {
         try {
-            "com.miui.gallery.editor_common.library.artstill.ArtStillEntranceUtils".hookBeforeMethod("isAvailable") {
+            val cls =
+                if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.editor_common.library.artstill.ArtStillEntranceUtils"
+                else "com.miui.gallery.util.ArtStillEntranceUtils"
+            cls.hookBeforeMethod(
+                getDefaultClassLoader(),
+                "isAvailable"
+            ) {
                 it.result = true
             }
         } catch (e: Throwable) {

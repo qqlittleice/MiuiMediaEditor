@@ -1,9 +1,8 @@
 @file:Suppress("unused")
 
-package com.yuk.mediaeditor.utils.ktx
+package com.yuk.mediaeditor.utils
 
 import android.content.res.XResources
-import com.github.kyuubiran.ezxhelper.init.InitFields.ezXClassLoader
 import com.github.kyuubiran.ezxhelper.utils.Log
 import dalvik.system.BaseDexClassLoader
 import de.robv.android.xposed.XC_MethodHook
@@ -44,14 +43,14 @@ fun Member.hookMethod(callback: XC_MethodHook) = try {
 inline fun MethodHookParam.callHooker(crossinline hooker: Hooker) = try {
     hooker(this)
 } catch (e: Throwable) {
-    Log.ex("Error occurred calling hooker on ${this.method}")
+    Log.e("Error occurred calling hooker on ${this.method}")
     Log.ex(e)
 }
 
 inline fun MethodHookParam.callReplacer(crossinline replacer: Replacer) = try {
     replacer(this)
 } catch (e: Throwable) {
-    Log.ex("Error occurred calling replacer on ${this.method}")
+    Log.e("Error occurred calling replacer on ${this.method}")
     Log.ex(e)
     null
 }
@@ -120,7 +119,7 @@ inline fun Class<*>.hookAfterAllMethods(methodName: String?, crossinline hooker:
 
     })
 
-inline fun Class<*>.replaceAfterAllMethods(methodName: String?, crossinline replacer: Replacer) =
+inline fun Class<*>.replaceAllMethods(methodName: String?, crossinline replacer: Replacer) =
     hookAllMethods(methodName, object : XC_MethodReplacement() {
         override fun replaceHookedMethod(param: MethodHookParam) = param.callReplacer(replacer)
     })
@@ -176,13 +175,13 @@ inline fun Class<*>.hookBeforeAllConstructors(crossinline hooker: Hooker) =
         override fun beforeHookedMethod(param: MethodHookParam) = param.callHooker(hooker)
     })
 
-inline fun Class<*>.replaceAfterAllConstructors(crossinline hooker: Hooker) =
+inline fun Class<*>.replaceAllConstructors(crossinline hooker: Hooker) =
     hookAllConstructors(object : XC_MethodReplacement() {
         override fun replaceHookedMethod(param: MethodHookParam) = param.callHooker(hooker)
     })
 
-fun String.hookMethod(method: String?, vararg args: Any?) = try {
-    findClass().hookMethod(method, *args)
+fun String.hookMethod(classLoader: ClassLoader, method: String?, vararg args: Any?) = try {
+    findClass(classLoader).hookMethod(method, *args)
 } catch (e: ClassNotFoundError) {
     Log.ex(e)
     null
@@ -192,11 +191,12 @@ fun String.hookMethod(method: String?, vararg args: Any?) = try {
 }
 
 inline fun String.hookBeforeMethod(
+    classLoader: ClassLoader,
     method: String?,
     vararg args: Any?,
     crossinline hooker: Hooker
 ) = try {
-    findClass().hookBeforeMethod(method, *args, hooker = hooker)
+    findClass(classLoader).hookBeforeMethod(method, *args, hooker = hooker)
 } catch (e: ClassNotFoundError) {
     Log.ex(e)
     null
@@ -206,11 +206,12 @@ inline fun String.hookBeforeMethod(
 }
 
 inline fun String.hookAfterMethod(
+    classLoader: ClassLoader,
     method: String?,
     vararg args: Any?,
     crossinline hooker: Hooker
 ) = try {
-    findClass().hookAfterMethod(method, *args, hooker = hooker)
+    findClass(classLoader).hookAfterMethod(method, *args, hooker = hooker)
 } catch (e: ClassNotFoundError) {
     Log.ex(e)
     null
@@ -220,11 +221,12 @@ inline fun String.hookAfterMethod(
 }
 
 inline fun String.replaceMethod(
+    classLoader: ClassLoader,
     method: String?,
     vararg args: Any?,
     crossinline replacer: Replacer
 ) = try {
-    findClass().replaceMethod(method, *args, replacer = replacer)
+    findClass(classLoader).replaceMethod(method, *args, replacer = replacer)
 } catch (e: ClassNotFoundError) {
     Log.ex(e)
     null
@@ -266,8 +268,6 @@ fun Any.getLongField(field: String?) = getLongField(this, field)
 fun Any.getLongFieldOrNull(field: String?) = runCatchingOrNull {
     getLongField(this, field)
 }
-
-fun Any.getBooleanField(field: String?) = getBooleanField(this, field)
 
 fun Any.getBooleanFieldOrNull(field: String?) = runCatchingOrNull {
     getBooleanField(this, field)
@@ -363,9 +363,14 @@ fun Class<*>.callStaticMethodOrNull(
     callStaticMethod(this, methodName, parameterTypes, *args)
 }
 
-fun String.findClass(classLoader: ClassLoader = ezXClassLoader): Class<*> = findClass(this, classLoader)
+fun String.findClass(classLoader: ClassLoader?): Class<*> = findClass(this, classLoader)
 
-fun String.findClassOrNull(classLoader: ClassLoader = ezXClassLoader): Class<*>? =
+infix fun String.on(classLoader: ClassLoader?): Class<*> = findClass(this, classLoader)
+
+fun String.findClassOrNull(classLoader: ClassLoader?): Class<*>? =
+    findClassIfExists(this, classLoader)
+
+infix fun String.from(classLoader: ClassLoader?): Class<*>? =
     findClassIfExists(this, classLoader)
 
 fun Class<*>.new(vararg args: Any?): Any = newInstance(this, *args)
@@ -383,10 +388,6 @@ fun <T> T.setIntField(field: String?, value: Int) = apply {
 
 fun <T> T.setLongField(field: String?, value: Long) = apply {
     setLongField(this, field, value)
-}
-
-fun <T> T.setFloatField(field: String?, value: Float) = apply {
-    setFloatField(this, field, value)
 }
 
 fun <T> T.setObjectField(field: String?, value: Any?) = apply {
@@ -477,28 +478,12 @@ inline fun ClassLoader.allClassesList(crossinline delegator: (BaseDexClassLoader
 }
 
 val Member.isStatic: Boolean
-    inline get() = Modifier.isStatic(this.modifiers)
+    inline get() = Modifier.isStatic(modifiers)
+val Member.isFinal: Boolean
+    inline get() = Modifier.isFinal(modifiers)
+val Member.isPublic: Boolean
+    inline get() = Modifier.isPublic(modifiers)
 val Member.isNotStatic: Boolean
-    inline get() = !this.isStatic
-
-fun Any.getFieldByClassOrObject(
-    fieldName: String,
-    isStatic: Boolean = false,
-    fieldType: Class<*>? = null
-): Field {
-    if (fieldName.isEmpty()) throw IllegalArgumentException("Field name must not be null or empty!")
-    var clz: Class<*> = if (this is Class<*>) this else this.javaClass
-    do {
-        clz.declaredFields
-            .filter { !(isStatic && !Modifier.isStatic(it.modifiers)) || !(!isStatic && Modifier.isStatic(it.modifiers)) }
-            .firstOrNull {
-                (fieldType == null || it.type == fieldType) && (it.name == fieldName)
-            }?.let { it.isAccessible = true;return it }
-    } while (clz.superclass.also { clz = it } != null)
-    throw NoSuchFieldError()
-}
-
-fun Class<*>.getStaticFiledByClass(fieldName: String, type: Class<*>? = null): Field {
-    if (fieldName.isEmpty()) throw IllegalArgumentException("Field name must not be null or empty!")
-    return this.getFieldByClassOrObject(fieldName, true, type)
-}
+    inline get() = !isStatic
+val Class<*>.isAbstract: Boolean
+    inline get() = !isPrimitive && Modifier.isAbstract(modifiers)
