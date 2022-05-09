@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.util.*
 
 plugins {
     id("com.android.application")

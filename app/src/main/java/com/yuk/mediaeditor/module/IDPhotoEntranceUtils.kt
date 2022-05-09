@@ -17,6 +17,12 @@ object IDPhotoEntranceUtils : HookRegister() {
             ) {
                 it.result = true
             }
+            cls.hookBeforeMethod(
+                getDefaultClassLoader(),
+                "getIdType"
+            ) {
+                it.result = 2
+            }
         } catch (e: Throwable) {
             Log.ex(e)
         }
