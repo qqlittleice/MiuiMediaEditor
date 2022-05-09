@@ -12,8 +12,7 @@ object VlogEntranceUtils : HookRegister() {
                 if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.config.VlogEntranceUtils"
                 else "com.miui.gallery.vlog.VlogEntranceUtils"
             cls.hookBeforeMethod(
-                getDefaultClassLoader(),
-                "isAvailable"
+                getDefaultClassLoader(), "isAvailable"
             ) {
                 it.result = true
             }

@@ -12,6 +12,11 @@ object SkyCheckHelper : HookRegister() {
                 if (lpparam.packageName == "com.miui.mediaeditor") "com.miui.gallery.editor_common.libs.SkyCheckHelper"
                 else "com.miui.gallery.editor.photo.app.sky.sdk.SkyCheckHelper"
             cls.hookBeforeMethod(
+                getDefaultClassLoader(), "isSkyEnable"
+            ) {
+                it.result = true
+            }
+            cls.hookBeforeMethod(
                 getDefaultClassLoader(), "isSupportTextYanhua"
             ) {
                 it.result = true

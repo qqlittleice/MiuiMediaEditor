@@ -13,8 +13,7 @@ object FilterManager : HookRegister() {
             "com.miui.gallery.editor.photo.core.imports.filter.FilterManager".hookBeforeMethod(
                 getDefaultClassLoader(), "getFilterCategory"
             ) {
-                val field =
-                    findField("android.os.Build") { type == String::class.java && name == "DEVICE" }
+                val field = findField("android.os.Build") { type == String::class.java && name == "DEVICE" }
                 putObject(field, "wayne")
             }
         } catch (e: Throwable) {
