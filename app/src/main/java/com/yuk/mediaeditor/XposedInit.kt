@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.github.kyuubiran.ezxhelper.init.EzXHelperInit
 import com.github.kyuubiran.ezxhelper.init.InitFields.appContext
-import com.yuk.mediaeditor.module.TODO
+import com.yuk.mediaeditor.module.*
 import com.yuk.mediaeditor.utils.Config
 import com.yuk.mediaeditor.utils.Config.TAG
 import com.yuk.mediaeditor.utils.ktx.hookBeforeMethod
@@ -38,6 +38,18 @@ class XposedInit : IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     private fun doHook() {
-        TODO().init()  // 启用4K60Fps支持
+        ArtStillEntranceUtils().init() // 艺术照片
+        BeautySupportUtils().init()
+        FilterManager().init()  // 大师滤镜
+        FilterSkyEntranceUtils().init()  // 魔法换天
+        FrameSelectorView().init()  // 视频特效30s
+        IDPhotoEntranceUtils().init() // 证件照
+        MagicMattingEntranceUtils().init()
+        Remover2CheckHelper().init()  // 魔法消除
+        SkyCheckHelper().init()
+        SmartVideoJudgeManager().init()
+        VideoEditorEntranceUtils().init()
+        VideoPostEntranceUtils().init()
+        VlogEntranceUtils().init()  // Mi剪辑
     }
 }

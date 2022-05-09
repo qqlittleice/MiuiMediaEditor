@@ -11,7 +11,7 @@
       android:resource="@array/xposed_scope" />
     <meta-data
       android:name="xposeddescription"
-      android:value="TODO" />
+      android:value="解锁小米相册-编辑的一些功能" />
     <meta-data
       android:name="xposedminversion"
       android:value="93" />

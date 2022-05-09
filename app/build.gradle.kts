@@ -13,8 +13,8 @@ android {
         applicationId = "com.yuk.mediaeditor"
         minSdk = 29
         targetSdk = 32
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 10
+        versionName = "1.0"
     }
     val properties = Properties()
     runCatching {
