@@ -8,12 +8,13 @@ plugins {
 android {
     compileSdk = 32
     buildToolsVersion = "32.0.0"
+    namespace = "com.yuk.mediaeditor"
     defaultConfig {
-        applicationId = "com.yuk.mediaeditor"
+        applicationId = namespace
         minSdk = 26
         targetSdk = 32
-        versionCode = 11
-        versionName = "1.1"
+        versionCode = 12
+        versionName = "1.2"
     }
     buildTypes {
         release {
@@ -47,7 +48,7 @@ android {
             }
         }
     }
-    namespace = "com.yuk.mediaeditor"
+
 }
 
 dependencies {
