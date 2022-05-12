@@ -10,7 +10,7 @@ android {
     buildToolsVersion = "32.0.0"
     defaultConfig {
         applicationId = "com.yuk.mediaeditor"
-        minSdk = 29
+        minSdk = 26
         targetSdk = 32
         versionCode = 11
         versionName = "1.1"
