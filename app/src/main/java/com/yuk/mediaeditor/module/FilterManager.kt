@@ -14,7 +14,7 @@ object FilterManager : HookRegister() {
                 getDefaultClassLoader(), "getFilterCategory"
             ) {
                 val field = findField("android.os.Build") { type == String::class.java && name == "DEVICE" }
-                putObject(field, "wayne")
+                it.thisObject.putObject(field, "wayne")
             }
         } catch (e: Throwable) {
             Log.ex(e)

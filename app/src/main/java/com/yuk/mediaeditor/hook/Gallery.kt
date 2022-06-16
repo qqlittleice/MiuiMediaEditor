@@ -11,7 +11,6 @@ object Gallery : AppRegister() {
         autoInitHooks(
             lpparam,
             ArtStillEntranceUtils,
-            //BeautySupportUtils,
             FilterManager,
             FilterSkyEntranceUtils,
             FrameSelectorView,
@@ -23,6 +22,8 @@ object Gallery : AppRegister() {
             VideoEditorEntranceUtils,
             VideoPostEntranceUtils,
             VlogEntranceUtils,
+            RecognizeFormUtil,
+            OCRHelper,
         )
     }
 }

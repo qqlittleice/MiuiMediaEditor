@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    compileSdk = 32
-    buildToolsVersion = "32.0.0"
+    compileSdk = 33
+    buildToolsVersion = "33.0.0"
     namespace = "com.yuk.mediaeditor"
     defaultConfig {
         applicationId = namespace
         minSdk = 26
-        targetSdk = 32
-        versionCode = 12
-        versionName = "1.2"
+        targetSdk = 33
+        versionCode = 13
+        versionName = "1.3"
     }
     buildTypes {
         release {
