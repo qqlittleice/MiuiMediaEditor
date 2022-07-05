@@ -26,7 +26,8 @@ object MediaEditor : AppRegister() {
             MovieConfig,
             GalleryFrameAccessUtils,
             FilterUtils,
-            galleryFrameMenuFragment,
+            GalleryFrameMenuFragment,
+            LeiCaFilter
         )
     }
 }

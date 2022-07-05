@@ -4,13 +4,12 @@ import com.github.kyuubiran.ezxhelper.utils.Log
 import com.yuk.mediaeditor.utils.HookRegister
 import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-object galleryFrameMenuFragment : HookRegister() {
+object LeiCaFilter : HookRegister() {
 
     override fun init() {
         try {
-            val cls = "com.miui.gallery.editor.photo.app.galleryframe.GalleryFrameMenuFragment\n"
-            cls.hookBeforeMethod(
-                getDefaultClassLoader(), "checkAccess"
+            "com.xiaomi.leica.LeiCaFilter".hookBeforeMethod(
+                getDefaultClassLoader(), "isSupport", String::class.java
             ) {
                 it.result = true
             }
