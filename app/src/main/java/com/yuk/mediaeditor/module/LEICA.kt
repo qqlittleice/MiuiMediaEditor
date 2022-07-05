@@ -4,18 +4,12 @@ import com.github.kyuubiran.ezxhelper.utils.Log
 import com.yuk.mediaeditor.utils.HookRegister
 import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-object OCRHelper : HookRegister() {
+object LEICA : HookRegister() {
 
     override fun init() {
         try {
-            val cls = "com.miui.gallery.ui.photoPage.ocr.OCRHelper"
-            cls.hookBeforeMethod(
-                getDefaultClassLoader(), "isSupportLocalOCR"
-            ) {
-                it.result = true
-            }
-            cls.hookBeforeMethod(
-                getDefaultClassLoader(), "isSupportOCR"
+            "OooO0O0.OooO0Oo.OooO00o.OooO00o".hookBeforeMethod(
+                getDefaultClassLoader(), "o00OOoo"
             ) {
                 it.result = true
             }

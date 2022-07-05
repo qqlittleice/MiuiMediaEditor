@@ -4,18 +4,15 @@ import com.github.kyuubiran.ezxhelper.utils.Log
 import com.yuk.mediaeditor.utils.HookRegister
 import com.yuk.mediaeditor.utils.hookBeforeMethod
 
-object OCRHelper : HookRegister() {
+object PicToPdfHelper : HookRegister() {
 
     override fun init() {
         try {
-            val cls = "com.miui.gallery.ui.photoPage.ocr.OCRHelper"
+            val cls =
+                if (lpparam.packageName == "com.miui.mediaeditor") return
+                else "com.miui.gallery.request.PicToPdfHelper"
             cls.hookBeforeMethod(
-                getDefaultClassLoader(), "isSupportLocalOCR"
-            ) {
-                it.result = true
-            }
-            cls.hookBeforeMethod(
-                getDefaultClassLoader(), "isSupportOCR"
+                getDefaultClassLoader(), "showSingleFilterSky"
             ) {
                 it.result = true
             }

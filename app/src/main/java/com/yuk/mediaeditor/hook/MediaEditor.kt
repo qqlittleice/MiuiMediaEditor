@@ -23,6 +23,10 @@ object MediaEditor : AppRegister() {
             VideoEditorEntranceUtils,
             VideoPostEntranceUtils,
             VlogEntranceUtils,
+            MovieConfig,
+            GalleryFrameAccessUtils,
+            FilterUtils,
+            galleryFrameMenuFragment,
         )
     }
 }
