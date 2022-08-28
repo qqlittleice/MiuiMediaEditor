@@ -13,8 +13,8 @@ android {
         applicationId = namespace
         minSdk = 26
         targetSdk = 33
-        versionCode = 14
-        versionName = "1.4"
+        versionCode = 15
+        versionName = "1.5"
     }
     buildTypes {
         release {
