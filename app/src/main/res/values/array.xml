@@ -3,5 +3,6 @@
     <string-array name="xposed_scope">
         <item>com.miui.mediaeditor</item>
         <item>com.miui.gallery</item>
+        <item>com.xiaomi.scanner</item>
     </string-array>
 </resources>

@@ -53,5 +53,5 @@ android {
 
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
-    implementation("com.github.kyuubiran:EzXHelper:0.9.2")
+    implementation("com.github.kyuubiran:EzXHelper:1.0.1")
 }
